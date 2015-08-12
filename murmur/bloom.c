@@ -4,20 +4,19 @@
 #include <string.h>
 #define DEBUG 0
 
-//Parameters
+//Parameters:
 //Table size
-#define TBSZ 256
+#define TBSZ 1024
 //Number Hash Fns
-#define NH 5
+#define NH 4
 //First Seed, Assuming Consecutive, 
 #define FS 0
 
-
 uint32_t murmur3_32(const char *key, uint32_t len, uint32_t seed);
 
-void add(int * h, unsigned long key){
-	//Hashes key with NH hash functions.
-	//Sets corresponding bits of h to reflect
+
+void add(unsigned char * h, unsigned long key){
+	//Hashes key with NH hash functions. Sets corresponding bits of h to reflect
 	//key's membership in h. 
 
 	uint32_t val;
@@ -31,7 +30,7 @@ void add(int * h, unsigned long key){
 		printf("inserted %lu \n", key);
 }
 
-int lookup(int * h, unsigned long key){
+int lookup(unsigned char * h, unsigned long key){
 	uint32_t val;
 	int found = 0;
 	for (int i = FS; i < FS + NH; ++i){
@@ -59,37 +58,17 @@ int lookup(int * h, unsigned long key){
 }
 
 int main(){
-	//the table
-	int * h;
-	h = calloc (TBSZ, sizeof(int));
+	unsigned char * h;
+	h = calloc (TBSZ, sizeof(unsigned char));
+
 	if(!h){
 		printf("failed to allocate h\n");
 		exit(1); 
 	}
 
-	unsigned long key = 5;
-	add(h, key);
-	if(lookup(h, key))
-		printf("found %lu\n", key);
-	else
-		printf("did not find %lu\n", key);
-	key = 4;
-	if(lookup(h, key))
-		printf("found %lu\n", key);
-	else
-		printf("did not find %lu\n", key);
-	add(h,9);
-	key = 9;
-	if(lookup(h, key))
-		printf("found %lu\n", key);
-	else
-		printf("did not find %lu\n", key);
-
-	key = 5;
-	if(lookup(h, key))
-		printf("found %lu\n", key);
-	else
-		printf("did not find %lu\n", key);
+	add(h,5);
+	if(lookup(h,5))
+		printf("found\n");
 
 	return 0;
 }
